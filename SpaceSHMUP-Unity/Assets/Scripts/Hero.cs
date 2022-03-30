@@ -3,7 +3,7 @@
  * Date Created: March 16, 2022
  * 
  * Last Edited by: NA
- * Last Edited: March 21, 2022
+ * Last Edited: March 30, 2022
  * 
  * Description: Hero ship controller
 ****/
@@ -20,7 +20,9 @@ public class Hero : MonoBehaviour
 
     #region PlayerShip Singleton
     static public Hero SHIP; //refence GameManager
+
    
+
     //Check to make sure only one gm of the GameManager is in the scene
     void CheckSHIPIsInScene()
     {
@@ -43,13 +45,20 @@ public class Hero : MonoBehaviour
     public float speed = 10;
     public float rollMult = -45;
     public float pitchMult = 30;
+    
+    [Space(10)]
 
-
+    [Header("Projectile Setting")]
+    public GameObject projectilePrefab;
+    public float projectileSpeed = 40;
 
     [Space(10)]
 
     private GameObject lastTriggerGo; //reference to the last triggering game object
+
    
+
+
     [SerializeField] //show in inspector
     private float _shieldLevel = 1; //level for shields
     public int maxShield = 4; //maximum shield level
@@ -107,7 +116,16 @@ public class Hero : MonoBehaviour
         //Rotate the ship to make more dynamic feel
         transform.rotation = Quaternion.Euler(yAxis * pitchMult, xAxis * rollMult, 0);
 
+        //Allow the skip to fire
+        if (Input.GetKeyDown(KeyCode.Space)) 
+        {
+            TempFire();
+            
+        }
+
+
     }//end Update()
+
 
 
     //Taking Damage
@@ -135,4 +153,17 @@ public class Hero : MonoBehaviour
 
     }//end OnTriggerEnter()
 
+
+    void TempFire() 
+    {
+        GameObject projGO = Instantiate<GameObject>(projectilePrefab);
+        projGO.transform.position = transform.position;
+        Rigidbody rb = projGO.GetComponent<Rigidbody>();
+        rb.velocity = Vector3.up * projectileSpeed;
+    }
+
+    public void AddScore(int value) 
+    {
+        gm.UpdateScore(value);
+    }
 }

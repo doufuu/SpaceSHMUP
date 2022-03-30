@@ -56,6 +56,9 @@ public class Enemy : MonoBehaviour
         }//end if(bndCheck != null && !bndCheck.offDown)
 
 
+
+
+
     }//end Update()
 
     //Virtual methods can be overiden by child instances
@@ -68,7 +71,24 @@ public class Enemy : MonoBehaviour
 
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        GameObject otherGO = collision.gameObject;
+        if (otherGO.tag == "Projectile Hero")
+        {
+            Debug.Log("enemy hit by projectile hero" + otherGO.name);
+            Destroy(otherGO);
+            Hero.SHIP.AddScore(score);
+            Destroy(gameObject);
+        }
+        else
+        {
+            Debug.Log("hit by something else bb im still alive hahahaha" + otherGO.name);
+        }
 
+
+
+    }
 
 
 }
